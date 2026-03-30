@@ -1,0 +1,26 @@
+\begin{table}[H] \centering
+\caption{Heterogeneous Effects by Owner Receiving Emails}
+\label{tab:het_pct_sales_owner_takeup_ontime}
+\begin{adjustbox}{max width=1.2\textwidth, center}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{6}{c}{Firm accepted offer} \\
+\cmidrule(lr){2-7}
+\multicolumn{1}{r}{Treatment:} & \multicolumn{2}{c}{Reminder} & \multicolumn{2}{c}{Announced reminder} & \multicolumn{2}{c}{Deadline} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+ & (1) & (2) & (3) & (4) & (5) & (6) \\
+\midrule
+Intercept & 0.429*** & 0.556*** & 0.379*** & 0.409*** & 0.494*** & 0.500*** \\ & (0.109) & (0.166) & (0.064) & (0.105) & (0.057) & (0.095) \\
+Treatment & 0.087 & 0.035 & 0.246*** & 0.364*** & 0.020 & 0.180 \\ & (0.117) & (0.182) & (0.086) & (0.138) & (0.082) & (0.133) \\
+Above-median \% sales using technology & 0.238 &  & 0.171** &  & 0.072 &  \\ & (0.175) &  & (0.085) &  & (0.081) \\
+Above-median \% sales using technology & -0.159 &  & -0.145 &  & 0.047 &   \\
+\hspace{1em} $\times$ Treatment & (0.185) &  & (0.119) &  & (0.114)  \\
+Owner was recipient of emails &  & -0.123 &  & 0.047 &  & -0.020 \\ &  & (0.185) &  & (0.112) &  & (0.101) \\
+Owner was recipient of emails &  & 0.083 &  & -0.181 &  & -0.063  \\
+\hspace{1em} $\times$ Treatment &  & (0.201) &  & (0.147) &  & (0.142)  \\
+\midrule
+Number of firms & 306 & 471 & 273 & 425 & 306 & 471 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

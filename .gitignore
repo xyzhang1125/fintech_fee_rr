@@ -1,0 +1,15 @@
+/documentation/*
+/data/*
+/proc/*
+*.DS_Store
+*Icon*
+Icon*
+.Rproj.user
+*.Rhistory
+.Rhistory
+.Rprofile
+\.Rprofile
+\.Rhistory
+
+renv/library/*
+

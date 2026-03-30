@@ -1,0 +1,29 @@
+\begin{table}[H]
+\caption{Monthly Sales Elasticity: Intent to Treat and Treatment on the Treated} 
+\label{tab:monthly_itt_tot}
+\centering
+\adjustbox{max width=\textwidth}{ 
+ \begin{tabular}[t]{lccc}
+\toprule
+  & Log(sales + 1) & Log(\# transactions + 1) & Continued using technology\\
+& (1) & (2) & (3)\\
+\toprule
+\underline{Panel A: Intent to Treat} \\ 
+Post * Treated & 0.024* & 0.022* & 0.013**\\
+ & (0.014) & (0.012) & (0.005)\\
+
+\underline{Panel B: Treatment on the Treated} \\ 
+
+Post * Adopted & 0.077* & 0.071* & 0.043**\\
+ & (0.045) & (0.037) & (0.017)\\
+\midrule
+Observations & 538,600 & 538,572 & 662,162\\
+Number of firms & 33,978 & 33,978 & 33,978\\
+Cluster std. errors & Firm & Firm & Firm\\
+Fixed effects & Firm \& month & Firm \& month & Firm \& month\\
+Control mean (levels) & 24,471 & 30.02 & 0.847\\
+Control mean (levels, winsorized) & 12,178 & 19.52 & 0.847\\
+\bottomrule
+\end{tabular}}
+\end{table}
+

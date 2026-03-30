@@ -1,0 +1,27 @@
+\begin{table}[H] \centering
+\caption{Heterogeneous Effects by Number of Employees}
+\label{tab:het_num_employee_all_ontime}
+\begin{adjustbox}{max width=1.2\textwidth, center}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{6}{c}{Firm accepted offer} \\
+\cmidrule(lr){2-7}
+\multicolumn{1}{r}{Treatment:} & \multicolumn{2}{c}{Reminder} & \multicolumn{2}{c}{Announced reminder} & \multicolumn{2}{c}{Deadline} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+ & (1) & (2) & (3) & (4) & (5) & (6) \\
+\midrule
+Intercept & 0.478*** & 0.571*** & 0.472*** & 0.459*** & 0.485*** & 0.538*** \\ & (0.105) & (0.133) & (0.053) & (0.082) & (0.051) & (0.080) \\
+Treatment & 0.050 & -0.036 & 0.112 & 0.158 & 0.073 & 0.005 \\ & (0.111) & (0.146) & (0.075) & (0.117) & (0.071) & (0.109) \\
+Above-median \# of employees & -0.024 &  & -0.043 &  & 0.008 &  \\ & (0.149) &  & (0.071) &  & (0.068) \\
+Above-median \# of employees & 0.073 &  & 0.168* &  & 0.074 &   \\
+\hspace{1em} $\times$ Treatment & (0.157) &  & (0.097) &  & (0.093)  \\
+More than 1 employee &  & -0.152 &  & -0.014 &  & -0.060 \\ &  & (0.160) &  & (0.091) &  & (0.088) \\
+More than 1 employee &  & 0.178 &  & 0.062 &  & 0.134  \\
+\hspace{1em} $\times$ Treatment &  & (0.173) &  & (0.129) &  & (0.120)  \\
+\midrule
+Number of firms & 462 & 462 & 417 & 417 & 462 & 462 \\
+Mean heterogeneity variable & 0.565 & 0.816 & 0.573 & 0.830 & 0.565 & 0.816 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
