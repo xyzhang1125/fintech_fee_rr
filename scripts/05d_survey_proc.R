@@ -9,8 +9,8 @@
 #   - here("data", "SurveyRecodes", "recode_8.1_why_activate_firstday.csv")
 #   - here("data", "SurveyRecodes", "recode_9.1_why_activate_later_other.csv")
 #   - here("data", "SurveyRecodes", "recode_10.3_why_reminder.csv")
-#   - here("data", "SurveyRecodes", "recode_10.4_reminder_feel_cat_missing.csv")
-#   - here("data", "SurveyRecodes", "recode_10.4_reminder_feel_cat.csv")
+#   - here("data", "SurveyRecodes", "recode_10.5_reminder_feel_cat_missing.csv")
+#   - here("data", "SurveyRecodes", "recode_10.5_reminder_feel_cat.csv")
 #   - here("data", "SurveyRecodes", "recode_11.1_offer_impact_cat_missing.csv")
 #   - here("data", "SurveyRecodes", "recode_11.1_offer_impact_cat.csv")
 # Files created:
@@ -374,7 +374,7 @@ survey_proc %>%
 # (2.5): Now that we've saved the number of don't knows for footnotes: convert all -777 and -888 answers to NA.
 # This reduces need for additional processing when generating graphs.
 # Better to be aware of this!
-# -777 ~ "Did not answer"
+# -777 ~ "Don't know"
 # -888 ~ "Refuses to answer",
 # survey_proc %<>% mutate_at(vars(all_of(char_vars)), ~ifelse(. %in% c(-777, -888), NA, .))
 
@@ -653,10 +653,10 @@ print_dont_know("why_activate_later")
 print_no_answer("why_activate_later")
 
 # (8.5): Replace one category with only one response.
-survey_proc %>% filter(req_ans_q9.1 == 1) %>% tab(why_activate_later)
-survey_proc %<>%
-  mutate(why_activate_later = str_replace(why_activate_later, "4", "-666"))
-survey_proc %>% filter(req_ans_q9.1 == 1) %>% tab(why_activate_later)
+# survey_proc %>% filter(req_ans_q9.1 == 1) %>% tab(why_activate_later)
+# survey_proc %<>%
+#   mutate(why_activate_later = str_replace(why_activate_later, "4", "-666"))
+# survey_proc %>% filter(req_ans_q9.1 == 1) %>% tab(why_activate_later)
 
 rm(recode_9.1)
 
@@ -665,15 +665,15 @@ rm(recode_9.1)
 ######################################################
 # (9.1): Import open question recodes.
 recode_10.3_other <- read_csv(here("data", "SurveyRecodes", "recode_10.3_why_reminder.csv"))
-recode_10.4_missing <- read_csv(here("data", "SurveyRecodes", "recode_10.4_reminder_feel_cat_missing.csv"))
-recode_10.4_other <- read_csv(here("data", "SurveyRecodes", "recode_10.4_reminder_feel_cat.csv"))
+recode_10.5_missing <- read_csv(here("data", "SurveyRecodes", "recode_10.5_reminder_feel_cat_missing.csv"))
+recode_10.5_other <- read_csv(here("data", "SurveyRecodes", "recode_10.5_reminder_feel_cat.csv"))
 
 why_reminder_other_table_final <- recode_10.3_other |>
   filter(why_reminder == -666) |>
   select(organization_uuid) |>
   left_join(why_reminder_other_table, by = "organization_uuid")
 
-reminder_feel_cat_other_table <- recode_10.4_missing |>
+reminder_feel_cat_other_table <- recode_10.5_missing |>
   filter(!is.na(reminder_feel_cat_other)) |>
   select(organization_uuid, reminder_feel_cat_other)|>
   left_join(survey_proc |>
@@ -706,24 +706,24 @@ write_xlsx(tables_list, path = here("proc", "survey_other_tables.xlsx"))
 
 # (9.2): Input missing responses in reminder feel question.
 # Filter for sections 3-10: recall_sms == 1 | firstemail_recall == 1
-# Question 10.4 How did you feel about receiving a reminder? (multiple categories).
+# Question 10.5 How did you feel about receiving a reminder? (multiple categories).
 # For this question, we're using the same recoding mechanism for "other"responses, 
 # but this is including new responses that were not previously in survey.
 survey_proc %>% tab(reminder_feel_cat)
-survey_proc %<>% recode_other("reminder_feel_cat", recode_10.4_missing)
+survey_proc %<>% recode_other("reminder_feel_cat", recode_10.5_missing)
 survey_proc %>% tab(reminder_feel_cat)
 
-# (9.3): Convert combination of -777 responses to only -777 in question 10.4.
+# (9.3): Convert combination of -777 responses to only -777 in question 10.5.
 survey_proc %<>% 
   mutate(reminder_feel_cat = ifelse(reminder_feel_cat %in% c("-666 -777", "3 -777"), "-777", reminder_feel_cat))
 survey_proc %>% tab(reminder_feel_cat)
 
-# (9.4): Send blank answers to missing in question 10.4(these are not -777 or -888).
+# (9.4): Send blank answers to missing in question 10.5(these are not -777 or -888).
 survey_proc %<>% mutate(reminder_feel_cat = ifelse(reminder_feel_cat == "", NA, reminder_feel_cat))
 
-# (9.5): Recode "other" responses in questions 10.3 and 10.4.
+# (9.5): Recode "other" responses in questions 10.3 and 10.5.
 survey_proc %<>% recode_other("why_reminder", recode_10.3_other)
-survey_proc %<>% recode_other("reminder_feel_cat", recode_10.4_other)
+survey_proc %<>% recode_other("reminder_feel_cat", recode_10.5_other)
 
 # (9.6): Tab non-responses for question 10.3.
 # Filter for sections 3-10: recall_sms == 1 | firstemail_recall == 1
@@ -749,28 +749,28 @@ print_no_answer("reminder_recall")
 print_other("why_reminder")
 print_dont_know("why_reminder")
 
-# (9.7): Convert "Increased trust in the offer" in question 10.4 to "Other".
+# (9.7): Convert "Increased trust in the offer" in question 10.5 to "Other".
 survey_proc %<>%
   mutate(reminder_feel_cat = str_replace(reminder_feel_cat, "5", "-666"))
 
-# (9.8): Tab non-responses for question 10.4.
-# Filter for sections 3-10: recall_sms == 1 | firstemail_recall == 1
-# Filter for section 10: (anticipated_reminder == 1 | unanticipated_reminder == 1) & (accepted_offer_date  >= ymd("2020-10-05") | accepted_offer == 0)
-# Filter for question 10.4: reminder_recall == 1
-survey_proc %<>% 
-  mutate(req_ans_q10.4 = req_ans_q10.2)
-tabna("reminder_feel_cat")
-print_other("reminder_feel_cat")
-print_dont_know("reminder_feel_cat")
-
-# (9.9): Tab non-responses for question 10.5.
-# Filter for sections 3-10: recall_sms == 1 | firstemail_recall == 1
-# Question 10.5.	Did the reminder change your perception of the offer’s value?
+# (9.8): Tab non-responses for question 10.5.
 # Filter for sections 3-10: recall_sms == 1 | firstemail_recall == 1
 # Filter for section 10: (anticipated_reminder == 1 | unanticipated_reminder == 1) & (accepted_offer_date  >= ymd("2020-10-05") | accepted_offer == 0)
 # Filter for question 10.5: reminder_recall == 1
 survey_proc %<>% 
   mutate(req_ans_q10.5 = req_ans_q10.2)
+tabna("reminder_feel_cat")
+print_other("reminder_feel_cat")
+print_dont_know("reminder_feel_cat")
+
+# (9.9): Tab non-responses for question 10.4.
+# Filter for sections 3-10: recall_sms == 1 | firstemail_recall == 1
+# Question 10.4.	Did the reminder change your perception of the offer’s value?
+# Filter for sections 3-10: recall_sms == 1 | firstemail_recall == 1
+# Filter for section 10: (anticipated_reminder == 1 | unanticipated_reminder == 1) & (accepted_offer_date  >= ymd("2020-10-05") | accepted_offer == 0)
+# Filter for question 10.4: reminder_recall == 1
+survey_proc %<>% 
+  mutate(req_ans_q10.4 = req_ans_q10.2)
 tabna("offer_value_change")
 print_dont_know("offer_value_change")
 
@@ -791,7 +791,7 @@ tabna("a_reminder_takeup")
 print_dont_know("a_reminder_takeup")
 print_no_answer("a_reminder_takeup")
 
-rm(recode_10.3_other, recode_10.4_missing, recode_10.4_other)
+rm(recode_10.3_other, recode_10.5_missing, recode_10.5_other)
 
 #######################################################
 ##  (10): Recode section 11 (offer value question).  ##
@@ -812,7 +812,7 @@ survey_proc %>% tab(offer_impact_cat)
 survey_proc %<>% 
   mutate(offer_impact_cat = ifelse(offer_impact_cat %in% c("-777 -888"), "-777", offer_impact_cat))
 
-# (10.4): Send blank answers to missing (these are not -777 or -888).
+# (10.5): Send blank answers to missing (these are not -777 or -888).
 survey_proc %<>% mutate(offer_impact_cat = ifelse(offer_impact_cat == "", NA, offer_impact_cat))
 
 # (10.5): Recode "other" responses in reminder feel question.

@@ -5,7 +5,7 @@
 # Files used:
 # 	- here("proc", "survey_successful.csv")
 #   - here("data", "Survey response mappings", "mapping_10.3_why_reminder.csv")
-#   - here("data", "Survey response mappings", "mapping_10.4_reminder_feel_cat.csv") 
+#   - here("data", "Survey response mappings", "mapping_10.5_reminder_feel_cat.csv") 
 # Files created:
 # 	- here("proc", "survey_why_reminder_changed.qs")
 # 	- here("results", "figures", "survey_why_reminder_changed.eps")
@@ -28,7 +28,7 @@
 #   - Figure C.13a: Why Firms Thought the Offer Had a Deadline and Reminder (Only reminder graph)
 #   - Figure C.18: How Firms Felt About Receiving Reminder
 # 	- Figure 9: Effect of Announced Reminder on Perceived Offer Value
-#     Graph questions 10.3 (why firms think they received the reminder), 10.4 (how firms feel
+#     Graph questions 10.3 (why firms think they received the reminder), 10.5 (how firms feel
 #     about receiving reminder)
 #--------------------------------------------------------------------------------------------
 
@@ -150,9 +150,9 @@ data_why_reminder %>%
 rm(data_why_reminder, current_mapping, current_graph_data, graph, data_test)
 
 #############################################################################################
-##    (2): Generate bar graph for question 10.4 (how firms felt about receiving reminder).  #
+##    (2): Generate bar graph for question 10.5 (how firms felt about receiving reminder).  #
 #############################################################################################
-# 10.4.	How did you feel about receiving a reminder? [Surveyor: select all that apply]
+# 10.5.	How did you feel about receiving a reminder? [Surveyor: select all that apply]
 # a.	Makes me feel important as a client
 # b.	Indifferent, without much interest or importance
 # c.	Motivated to not pass up on the offer
@@ -163,16 +163,16 @@ rm(data_why_reminder, current_mapping, current_graph_data, graph, data_test)
 
 # Filter for sections 3-10: recall_sms == 1 | firstemail_recall == 1
 # Filter for section 10: (anticipated_reminder == 1 | unanticipated_reminder == 1) & (accepted_offer_date  >= ymd("2020-10-05") | accepted_offer == 0)
-# Filter for question 10.4: reminder_recall == 1
+# Filter for question 10.5: reminder_recall == 1
 
 # (2.1): Import survey data.
 data_reminder_feel_cat <- read_csv(here("proc", "survey_successful.csv")) %>% 
-  select(organization_uuid, reminder_feel_cat, req_ans_q10.4, anticipated_reminder, unanticipated_reminder) %>% 
-  filter(req_ans_q10.4 == 1)
+  select(organization_uuid, reminder_feel_cat, req_ans_q10.5, anticipated_reminder, unanticipated_reminder) %>% 
+  filter(req_ans_q10.5 == 1)
 data_reminder_feel_cat %>% tab(reminder_feel_cat)
 
 # (2.2): Import response mapping.
-current_mapping <- read_csv(here("data", "Survey response mappings", "mapping_10.4_reminder_feel_cat.csv")) %>% 
+current_mapping <- read_csv(here("data", "Survey response mappings", "mapping_10.5_reminder_feel_cat.csv")) %>% 
   mutate(response_var = str_to_lower(response) %>% str_replace_all(" ", "_")) %>% 
   filter(reminder_feel_cat != "5")
 
@@ -268,22 +268,22 @@ irritated_split %>%
 rm(data_reminder_feel_cat, current_mapping, current_graph_data, graph, data_test)
 
 ###########################################################################################
-##    (3): Generate bar graph for question 10.5 (change in perception of offer value).   ##
+##    (3): Generate bar graph for question 10.4 (change in perception of offer value).   ##
 ###########################################################################################
-# 10.5.	Did the reminder change your perception of the offer’s value? 
+# 10.4.	Did the reminder change your perception of the offer’s value? 
 # a.	Yes (Why? ____________)
 # b.	No
 
 # Filter for sections 3-10: recall_sms == 1 | firstemail_recall == 1
 # Filter for section 10: (anticipated_reminder == 1 | unanticipated_reminder == 1) & (accepted_offer_date  >= ymd("2020-10-05") | accepted_offer == 0)
-# Filter for question 10.5: reminder_recall == 1
+# Filter for question 10.4: reminder_recall == 1
 
 # (3.1): Import survey results and process data.
 data_offer_value_change <- read_csv(here("proc", "survey_successful.csv")) %>% 
-  select(organization_uuid, req_ans_q10.5, anticipated_reminder, unanticipated_reminder, offer_value_change) %>% 
+  select(organization_uuid, req_ans_q10.4, anticipated_reminder, unanticipated_reminder, offer_value_change) %>% 
   mutate(rem_type = ifelse(anticipated_reminder == 1, "Announced Reminder", "Unannounced Reminder"),
          ant_rem = ifelse(rem_type == "Anticipated Reminder", 1, 0)) %>% 
-  filter(req_ans_q10.5 == 1)
+  filter(req_ans_q10.4 == 1)
 
 nrow(data_offer_value_change %>% 
        filter(!is.na(offer_value_change) & offer_value_change != -777))%>% 
